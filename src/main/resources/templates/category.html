@@ -172,15 +172,15 @@
 
 							<nav aria-label="Page navigation" th:if="${totalPages > 0}">
 								<ul class="pagination justify-content-center">
-									<li class="page-item disabled"><a
-										class="page-link page-link-prev" href="#"
+									<li class="page-item" th:classappend="${currentPage - 1 == 1} ? disabled"><a
+										class="page-link page-link-prev" th:href="@{/category?page={page}(page=${currentPage-2})}"
 										aria-label="Previous" tabindex="-1" aria-disabled=""> <span
 											aria-hidden=""><i class="icon-long-arrow-left"></i></span>Prev
 									</a></li>
 									<li th:each="i: ${#numbers.sequence(1, totalPages)}" class="page-item" aria-current="page" th:classappend="${i==currentPage-1} ? active"><a
 										class="page-link" th:href="@{/category?page={page}(page=${i})}" th:text=${i}></a></li>
 									
-									<li class="page-item"><a class="page-link page-link-next"
+									<li class="page-item" th:classappend="${currentPage - 1 == totalPages} ? disabled"><a class="page-link page-link-next"
 										th:href="@{/category?page={page}(page=${currentPage})}" aria-label="Next"> Next <span aria-hidden="true"><i
 												class="icon-long-arrow-right"></i></span>
 									</a></li>
@@ -231,55 +231,6 @@
 
 									</div>
 									<!-- End .widget -->
-
-									<div class="widget widget-collapsible">
-										<h3 class="widget-title">
-											<a data-toggle="collapse" href="#widget-2" role="button"
-												aria-expanded="true" aria-controls="widget-1"> Gender </a>
-										</h3>
-										<!-- End .widget-title -->
-
-										<div class="collapse show" id="widget-2">
-											<div class="widget-body">
-												<div class="filter-items filter-items-count">
-													<div class="filter-item">
-														<div class="form-check form-check-inline">
-															<input class="form-check-input" type="radio"
-																name="gender" id="inlineRadio1"
-																value="UNISEX" checked> <label class="form-check-label"
-																for="inlineRadio1">Unisex</label>
-														</div>
-														<div class="form-check form-check-inline">
-															<input class="form-check-input" type="radio"
-																name="gender" id="inlineRadio2"
-																value="MALE"> <label class="form-check-label"
-																for="inlineRadio2">Male</label>
-														</div>
-														<div class="form-check form-check-inline">
-															<input class="form-check-input" type="radio"
-																name="gender" id="inlineRadio3"
-																value="FEMALE"> <label
-																class="form-check-label" for="inlineRadio3">Female</label>
-														</div>
-														<!-- End .custom-checkbox -->
-
-													</div>
-													<!-- End .filter-item -->
-
-
-												</div>
-												<!-- End .filter-items -->
-											</div>
-											<!-- End .widget-body -->
-										</div>
-										<!-- End .collapse -->
-
-									</div>
-									<!-- End .widget -->
-
-
-
-
 
 									<div class="widget widget-collapsible">
 										<h3 class="widget-title">

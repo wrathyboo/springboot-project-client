@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItem {
+   private Integer id;
    private String image;
    private String name;
    private Integer price;
    private Integer sale;
    private Integer quantity;
    private Integer total;
+   private Integer cartId;
 }

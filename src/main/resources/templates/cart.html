@@ -77,7 +77,11 @@
 													      <span class="" th:text="'$'+${#numbers.formatDecimal((s.price - s.price * s.sale / 100) / 100 * s.quantity , 0, 'COMMA', 2, 'POINT')}"></span>
 													</div>	
 											</td>
-											<td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+											<td class="remove-col">
+											
+									    <a th:href="@{/cart-remove-item?cartId={cartId}(cartId=${s.cartId})}" class="btn-remove" onclick="return confirm('Are you sure you want to remove this product?')"><i class="icon-close"></i></a>
+
+											</td>
 										</tr>
 									</tbody>
 								</table><!-- End .table table-wishlist -->

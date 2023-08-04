@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import com.wrathyboo.client.entities.RegisterRequest;
 import com.wrathyboo.client.service.ProductService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -21,6 +23,14 @@ public class UserController {
     public String loginPage(Model model, Authentication auth){
     	model.addAttribute("registerRes", new RegisterRequest());
         return "login";
+    }
+    
+    @RequestMapping("redir")
+    public String redir(Model model, Authentication auth, HttpServletRequest request){
+    	productService.getUserCart(auth, model);
+    	 String referer = request.getHeader("Referer");
+    	model.addAttribute("registerRes", new RegisterRequest());
+        return "redirect:"+referer;
     }
 
     @RequestMapping("account")

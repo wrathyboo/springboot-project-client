@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,12 +21,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.wrathyboo.client.entities.Cart;
 import com.wrathyboo.client.entities.CartItem;
+import com.wrathyboo.client.entities.CartRequest;
 import com.wrathyboo.client.entities.Category;
 import com.wrathyboo.client.entities.Product;
 import com.wrathyboo.client.entities.RegisterRequest;
 import com.wrathyboo.client.entities.User;
 import com.wrathyboo.client.service.ProductService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -131,15 +134,34 @@ public class ProductController {
     }
     
     @PostMapping("add-to-cart/{id}")
-    public String cartAddItem(@PathVariable Integer id, Model model) {
+    public String cartAddItem(@PathVariable Integer id,
+    		                  @RequestParam(name="quantity", defaultValue = "1", required = false) Integer quantity,
+    		                  Model model, HttpServletRequest request) {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	User user = (User)auth.getPrincipal();
+    	List<CartItem> list = productService.getCart(user.getId());
     	Cart cart = new Cart();
+    	
+    	
+    	
     	cart.setOwner(user.getId());
     	cart.setItem(id);
-    	cart.setQuantity(1);
+    	cart.setQuantity(quantity);
+    	
+
+    	
     	productService.cartAddItem(cart);
-    	return "redirect:../category";
+    	 String referer = request.getHeader("Referer");
+    	return "redirect:" + referer;
+    }
+    
+    @GetMapping("cart-remove-item")
+    public String cartRemoveItem(
+    		                    @RequestParam(name="cartId", required = false) Integer cartId,
+    		                    HttpServletRequest request)  {
+    	System.out.println(productService.cartRemoveItem(cartId));
+    	 String referer = request.getHeader("Referer");
+    	return "redirect:" + referer;
     }
 
     @RequestMapping("checkout")

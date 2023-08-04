@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 
@@ -44,7 +44,7 @@ public class SecurityConfig {
 	};
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, HttpServletRequest request) throws Exception {
 		return http.authorizeHttpRequests(auth -> auth
 		           .requestMatchers(AUTH_WHITELIST).permitAll()
                    .anyRequest().authenticated())
@@ -55,7 +55,7 @@ public class SecurityConfig {
 			    		   .loginPage("/login")
 			    		   .loginProcessingUrl("/process_login")
 			    		   .failureUrl("/login?error")
-			    		   .defaultSuccessUrl("/account",true)
+			    		   .defaultSuccessUrl("/redir",true)
 			    		   .permitAll())
 			       .logout(logout -> logout 
 			    		   .logoutUrl("/logout")

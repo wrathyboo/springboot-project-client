@@ -23,10 +23,12 @@ import com.google.gson.Gson;
 import com.sun.jersey.api.client.GenericType;
 import com.wrathyboo.client.entities.Cart;
 import com.wrathyboo.client.entities.CartItem;
+import com.wrathyboo.client.entities.CartRequest;
 import com.wrathyboo.client.entities.Category;
 import com.wrathyboo.client.entities.Product;
 import com.wrathyboo.client.entities.User;
 
+import com.wrathyboo.client.entities.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -53,6 +55,34 @@ public class ProductService {
 		WebClient client = WebClient.create("http://localhost:8080");
 		WebClient.ResponseSpec responseSpec = client.get().uri(builder -> builder.path("/api/v1/product")
                 .queryParam("page", page)
+                .build())
+				.retrieve();
+		String responseBody = responseSpec.bodyToMono(String.class).block();
+		GenericType<List<Product>> listType = new GenericType<List<Product>>() {
+		};
+		List<Product> list = son.fromJson(responseBody, listType.getType());
+		return list;
+	}
+	
+	public List<Product> getItemsByType(Type type) {
+		Gson son = new Gson();
+		WebClient client = WebClient.create("http://localhost:8080");
+		WebClient.ResponseSpec responseSpec = client.get().uri(builder -> builder.path("/api/v1/product")
+                .queryParam("type", type)
+                .build())
+				.retrieve();
+		String responseBody = responseSpec.bodyToMono(String.class).block();
+		GenericType<List<Product>> listType = new GenericType<List<Product>>() {
+		};
+		List<Product> list = son.fromJson(responseBody, listType.getType());
+		return list;
+	}
+	
+	public List<Product> getItemsByRating() {
+		Gson son = new Gson();
+		WebClient client = WebClient.create("http://localhost:8080");
+		WebClient.ResponseSpec responseSpec = client.get().uri(builder -> builder.path("/api/v1/product")
+                .queryParam("popular", "yes")
                 .build())
 				.retrieve();
 		String responseBody = responseSpec.bodyToMono(String.class).block();
@@ -113,6 +143,18 @@ public class ProductService {
 				.bodyToMono(Void.class)
 				.block();
 		return response;
+	}
+	
+	public String cartRemoveItem(Integer res) {
+		
+			Gson son = new Gson();
+		WebClient client = WebClient.create();
+		WebClient.ResponseSpec responseSpec = client.get().uri("http://localhost:8080/api/v1/cart/remove?cartId={cartId}",res)
+				.retrieve();
+		String responseBody = responseSpec.bodyToMono(String.class).block();
+		
+		return responseBody;
+				
 	}
 	
 	public List<Product> searchItems(String keys) {

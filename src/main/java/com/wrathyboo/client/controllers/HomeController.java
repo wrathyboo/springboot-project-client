@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.wrathyboo.client.entities.CartItem;
+import com.wrathyboo.client.entities.Product;
 import com.wrathyboo.client.entities.RegisterRequest;
+import com.wrathyboo.client.entities.Type;
 import com.wrathyboo.client.entities.User;
 import com.wrathyboo.client.service.ProductService;
 
@@ -33,6 +35,14 @@ public class HomeController {
     		productService.getUserCart(auth, model);
     	}
     	else currentUser = "guest";
+    	
+    	List<Product> femaleList = productService.getItemsByType(Type.FEMALE);
+    	List<Product> maleList = productService.getItemsByType(Type.MALE);
+    	List<Product> popularList = productService.getItemsByRating();
+    	
+    	model.addAttribute("popularList",popularList);
+    	model.addAttribute("femaleList",femaleList);
+    	model.addAttribute("maleList",maleList);
     	model.addAttribute("registerRes", new RegisterRequest());
     	model.addAttribute("user",currentUser);
     	
